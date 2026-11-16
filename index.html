@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>小熊猫户外 · 登山装备智能推荐</title>
+<meta name="description" content="基于知识的登山装备智能推荐：按所选山峰、天气与健康状况，自动匹配冲锋衣并给出命中理由。" />
+<link rel="stylesheet" href="assets/style.css?v=20261116b" />
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <img src="assets/logo.png" alt="小熊猫户外 logo" />
+      <div><b>小熊猫户外</b><span>Redpanda&nbsp;Alpine</span></div>
+    </a>
+    <nav class="nav-links">
+      <a href="#peak">目标山峰</a>
+      <a href="#plan">个人条件</a>
+      <a href="#result">推荐结果</a>
+      <a href="#guide">穿衣指南</a>
+      <a href="#rules">推荐规则</a>
+    </nav>
+    <a class="nav-cta" href="#plan">开始定制</a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="hero-bg"><img id="heroImg" alt="" /></div>
+  <div class="wrap">
+    <span class="eyebrow">Knowledge-based Recommendation · 知识型推荐</span>
+    <h1 class="display">为你的下一座山，<br/>选一件<span class="em">对的装备</span></h1>
+    <p class="lead">选定山峰与天气，填写健康状况与预算，系统按「硬约束 + 加权打分」从 120 款冲锋衣中为你筛出最合适的外层，并给出命中理由。</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#plan">开始定制方案 →</a>
+      <a class="btn btn-ghost" href="#peak">浏览山峰库</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><b>120</b><span>款登山外套</span></div>
+      <div class="stat"><b>110</b><span>座可攀山峰</span></div>
+      <div class="stat"><b>7</b><span>条打分规则</span></div>
+      <div class="stat"><b>5</b><span>条硬约束</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 目标山峰 ============ -->
+<section id="peak">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow">Step 01 · Destination</span>
+        <h2>先选一座山</h2>
+      </div>
+      <p>数据取自《中国可攀山峰库》。选定山峰后，系统会自动带出海拔、难度、山顶气温与天气风险，作为推荐的环境条件。</p>
+    </div>
+
+    <div class="mtn-toolbar reveal">
+      <input id="mtnSearch" type="text" placeholder="搜索山峰 / 省份…" style="max-width:240px" />
+      <div class="chips" id="mtnRegions"></div>
+    </div>
+    <div class="mtn-grid reveal" id="mtnGrid"></div>
+  </div>
+</section>
+
+<!-- ============ 02 个人条件 ============ -->
+<section id="plan" style="background:var(--celadon-2); border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow">Step 02 · Your Profile</span>
+        <h2>告诉我们你的情况</h2>
+      </div>
+      <p>按《人群分类库》的维度采集：性别、年龄、健康状况、季节与天气、抗寒与防水需求，以及预算与轻量偏好。</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="reveal">
+        <div class="panel">
+          <h3>个人情况</h3>
+          <p class="sub">身体状况用于匹配保暖需求，不采集身型尺寸</p>
+          <div class="row3">
+            <div class="field"><label>性别</label>
+              <select id="f_gender"><option>男</option><option>女</option></select></div>
+            <div class="field"><label>年龄</label>
+              <input id="f_age" type="number" min="10" max="90" value="30" /></div>
+            <div class="field"><label>健康状况</label>
+              <select id="f_health">
+                <option value="" selected>无特殊健康状况</option>
+                <option value="高血压/糖尿病（控制良好）">高血压/糖尿病（控制良好）</option>
+                <option value="膝关节旧伤">膝关节旧伤</option>
+                <option value="体质较弱、易感冒">体质较弱、易感冒</option>
+                <option value="对冷过敏/体寒明显">对冷过敏/体寒明显</option>
+              </select></div>
+          </div>
+          <div class="field" style="margin-bottom:0"><label>健康提示</label>
+            <p class="sub" style="margin:0">严重心脑血管/呼吸系统疾病、孕期、严重关节损伤、术后恢复期等情况不建议登山，请遵医嘱；严重恐高或行动不便者请选择平缓短途路线。</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>预算与偏好</h3>
+          <p class="sub">预算为硬性上限（超出即不推荐），重量参与打分微调</p>
+          <div class="field"><label>预算上限 <span class="hint">人民币 · 超出即剔除</span></label>
+            <div class="range"><input id="f_budget" type="range" min="300" max="9000" step="100" value="5000" /><b id="v_budget">¥5000</b></div>
+          </div>
+          <div class="field"><label>可接受重量上限 <span class="hint">克</span></label>
+            <div class="range"><input id="f_weight" type="range" min="150" max="1600" step="10" value="600" /><b id="v_weight">600g</b></div>
+          </div>
+          <div class="field"><label>内胆需求</label>
+            <div class="chips" data-chip="可拆内胆需求" data-single="1">
+              <button class="chip" data-value="否">一体式（否）</button>
+              <button class="chip" data-value="是">需可拆内胆</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="panel">
+          <h3>场景与气候</h3>
+          <p class="sub">决定防水、防风与保暖等级</p>
+          <div class="field"><label>使用场景</label>
+            <div class="chips" data-chip="使用场景" data-single="1">
+              <button class="chip" data-value="高海拔技术">高海拔技术</button>
+              <button class="chip" data-value="中高海拔多日">中高海拔多日</button>
+              <button class="chip" data-value="城市近郊单日">城市近郊单日</button>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>季节 / 气候</label>
+              <select id="f_season"><option>春季</option><option selected>秋季</option><option>夏季</option><option>冬季</option></select></div>
+            <div class="field"><label>天气</label>
+              <div class="chips" data-chip="天气" data-single="1">
+                <button class="chip" data-value="晴好">晴好</button>
+                <button class="chip" data-value="多雨">多雨</button>
+                <button class="chip" data-value="多雨大风">多雨大风</button>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label>预计温度与天气 <span class="hint">按所选山峰 + 季节估算</span></label>
+            <div class="forecast is-empty" id="forecast">
+              <div class="fc-item"><span>峰顶预计温度</span><b id="fcTemp">—</b><small id="fcTempNote">在 Step 01 选定山峰后显示</small></div>
+              <div class="fc-item"><span>预计天气</span><b id="fcWeather">—</b><small id="fcWeatherNote">&nbsp;</small></div>
+              <div class="fc-item"><span>降水 / 风力</span><b id="fcExtra">—</b><small id="fcExtraNote">&nbsp;</small></div>
+            </div>
+          </div>
+          <div class="field">
+            <label>推荐外套类型与功能 <span class="hint">按所选山峰的海拔 / 天气 / 难度推导</span></label>
+            <div class="gear-tip is-empty" id="gearTip">
+              <div class="gt-head"><span>推荐类型</span><b id="gtType">—</b></div>
+              <div class="gt-func" id="gtFunc">选定山峰后显示推荐外套类型与关键功能</div>
+              <div class="gt-why" id="gtWhy">&nbsp;</div>
+            </div>
+          </div>
+          <div class="field"><label>装备类型需求 <span class="hint">（选购注意点：品类分不清）</span></label>
+            <div class="chips" data-chip="装备类型需求" data-single="1">
+              <button class="chip" data-value="硬壳">硬壳</button>
+              <button class="chip" data-value="软壳">软壳</button>
+              <button class="chip" data-value="三合一">三合一</button>
+              <button class="chip" data-value="羽绒">羽绒</button>
+              <button class="chip" data-value="棉服">棉服</button>
+              <button class="chip" data-value="风壳">风壳</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>功能需求</h3>
+          <p class="sub">防水为硬约束，其余参与打分</p>
+          <div class="field"><label>防水需求 <span class="hint">硬约束</span></label>
+            <div class="chips" data-chip="防水需求" data-single="1">
+              <button class="chip" data-value="强">必须强防水</button>
+              <button class="chip" data-value="中">中等即可</button>
+              <button class="chip" data-value="弱">不限</button>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>防风需求</label>
+              <div class="chips" data-chip="防风需求" data-single="1">
+                <button class="chip" data-value="强">强</button><button class="chip" data-value="中">中</button>
+              </div></div>
+            <div class="field"><label>保暖需求</label>
+              <div class="chips" data-chip="保暖需求" data-single="1">
+                <button class="chip" data-value="强效保暖">强效保暖</button>
+                <button class="chip" data-value="中等保暖">中等</button>
+                <button class="chip" data-value="轻量透气">轻量透气</button>
+              </div></div>
+          </div>
+        </div>
+
+        <div class="panel" style="display:flex; gap:14px; align-items:center; flex-wrap:wrap">
+          <button class="btn btn-ghost" id="btnPrefill" style="border-color:var(--sage-deep); color:var(--sage-deep)">按山峰智能预填</button>
+          <button class="btn btn-ghost" id="btnDemo" style="border-color:var(--line); color:var(--teak)">载入示例画像</button>
+          <button class="btn btn-primary" id="btnRun" style="background:var(--rust); color:#fff">生成推荐 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 推荐结果 ============ -->
+<section id="result">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow">Step 03 · Recommendation</span>
+        <h2>推荐结果</h2>
+      </div>
+      <p id="resultHint">在上方设定条件后点击「生成推荐」，这里会列出 Top-N 与每款的命中规则、得分与剔除原因。</p>
+    </div>
+
+    <div class="result-top reveal">
+      <div class="sum" id="summary">尚未生成 · 请先在「个人条件」中点击「生成推荐」</div>
+      <div id="condChips" class="chips"></div>
+    </div>
+
+    <div class="cards" id="cards"></div>
+
+    <details class="drop" id="dropBox">
+      <summary><span class="caret">▸</span> 被剔除的商品 <span class="pill" id="dropCount">0</span> <span class="hint" style="color:var(--muted);font-size:12px">（核对硬约束：不满足一票否决）</span></summary>
+      <div id="dropBody"></div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ 穿衣指南 ============ -->
+<section class="guide" id="guide">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow">Field Notes · 户外知识</span>
+        <h2>三层穿衣法 & 失温防范</h2>
+      </div>
+      <p>选自《选购登山服注意点》。冲锋衣本身不保暖，核心是「保持干燥、动态穿脱、防止失温」。</p>
+    </div>
+    <div class="layers reveal">
+      <div class="layer"><div class="lno">01</div><span class="tag">Base Layer</span>
+        <h4>内层 · 速干排汗</h4><p>内层切忌选棉——纯棉吸汗后不易干，山风一吹带走体温，极易引发失温。应选速干排汗面料。</p></div>
+      <div class="layer"><div class="lno">02</div><span class="tag">Mid Layer</span>
+        <h4>中层 · 抓绒 / 羽绒锁温</h4><p>锁住体温的中坚层。昼夜温差大或冬季高寒时，配合可拆内胆或羽绒中间层使用。</p></div>
+      <div class="layer"><div class="lno">03</div><span class="tag">Shell</span>
+        <h4>外层 · 防风防雨</h4><p>冲锋衣（硬壳/软壳）负责防风与防突发阵雨，并为中间层留出叠穿余量；认准 GB/T32614 与防水透湿指数。</p></div>
+    </div>
+    <div class="note-strip reveal" style="margin-top:26px">
+      <span style="font-family:var(--serif);font-size:22px;color:var(--gold)">“</span>
+      <div><b>关于参数与预算：</b>防水用 mmH₂O 衡量，数值越高防水越强；无国标标注、只写「防风」的往往不是真正冲锋衣。单日、天气稳定的低海拔路线，硬壳性价比不高、软壳更舒适；5000m 以上或高难路线才需要高端硬壳。<b>不要为「大牌」盲目加价，而要按「你的山 + 天气 + 身体状况」来选。</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 规则说明 ============ -->
+<section id="rules">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow">The Engine · 推荐引擎</span>
+        <h2>规则与打分</h2>
+      </div>
+      <p>全部规则来自 <code>登山装备_产品推荐规则.json</code>，可替换为你的数据库。</p>
+    </div>
+    <div class="rule-grid reveal">
+      <div class="panel">
+        <h3>硬约束 filter_rules</h3><p class="sub">不满足即剔除，一票否决</p>
+        <ul class="rule-list" id="ruleFilters"></ul>
+      </div>
+      <div class="panel">
+        <h3>打分项 score_rules</h3><p class="sub">命中即累加权重，降序取 Top-N</p>
+        <ul class="rule-list" id="ruleScores"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="f-brand">
+      <img src="assets/logo.png" alt="logo" />
+      <div><h5>小熊猫户外 · Redpanda Alpine</h5>
+      <div style="font-size:12px;color:#b7ab98;letter-spacing:.1em">登山装备智能推荐系统</div></div>
+    </div>
+    <div class="f-links">
+      <a href="#peak">目标山峰</a><a href="#plan">个人条件</a><a href="#result">推荐结果</a>
+      <a href="#guide">穿衣指南</a><a href="#rules">推荐规则</a>
+    </div>
+    <div class="f-note">
+      数据来源：登山外套库（120 款）· 中国可攀山峰库（110 座）· 人群分类库 · 选购登山服注意点。
+      推荐结果由知识型规则引擎生成，仅供选型参考；实际穿着请结合当日天气与个人体感，并遵循「三层穿衣法」动态穿脱。
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/data.js?v=20261116a"></script>
+<script src="assets/app.js?v=20261116a"></script>
+</body>
+</html>
